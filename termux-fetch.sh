@@ -6,9 +6,12 @@ termux-battery-status | jq -r --arg yellow $yellow  --arg normal $normal --arg  
 IFS=' ' read -ra array <<< "$(uptime)"
 uptimestr=${array[2]}
 if [ "${array[3]}" = "min," ]
-then uptimestr+= "min(s)"
+then uptimestr+=" min(s)"
 else uptimestr+="hour(s)"
 fi
 echo "${underline}General Info:${normal}
+${yellow}OS: ${normal}$(uname -o) $(getprop ro.build.version.release) $(uname -m)
+${yellow}Host: ${normal}$(getprop ro.product.brand) $(getprop ro.vendor.product.model)
+${yellow}Kernel: ${normal}$(uname -rs)
 ${yellow}Uptime: ${normal}${uptimestr/,/' '}
 ${yellow}Termux Version: ${normal}${TERMUX_VERSION}"
