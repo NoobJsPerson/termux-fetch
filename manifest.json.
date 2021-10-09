@@ -1,0 +1,12 @@
+{
+        "name": "termux-fetch",
+        "version": "1.0",
+        "arch": "all",
+        "maintainer": "@NoobJsPerson",
+        "description": "A small bash script that gives info about your device",
+        "homepage": "https://github.com/NoobJsPerson",
+        "depends": ["jq", "termux-api"],
+        "files" : {
+                "termux-fetch.sh": "bin/termux-fetch"
+        }
+}
