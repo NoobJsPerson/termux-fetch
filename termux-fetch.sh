@@ -14,12 +14,12 @@ marray=($(cat .tmp | tr ';' '\n'))
 rm .tmp
 if [[ $1 != t ]]; then
 yellow=$(printf '\033[1;33m')
-underline=$(printf '\033[1;4;93m')
 normal=$(printf '\033[0m')
 else
 yellow='the'
 normal='is'
 fi
+echo "${yellow}$(whoami)@$(hostname)"
 if [[ $(checkcmd termux-camera-info) != 0 && $(checkcmd jq) != 0 ]];
 then
 termux-camera-info | jq -r --arg yellow $yellow  --arg normal $normal '"\($yellow)Cameras: \($normal)\(length)\n\($yellow)Capabilities: \($normal)\(.[0].capabilities | join(", "))"'
@@ -29,7 +29,7 @@ echo "${yellow}OS: ${normal}$(uname -o) $(getprop ro.build.version.release) $(un
 ${yellow}Host: ${normal}$(getprop ro.product.brand) $(getprop ro.vendor.product.model)
 ${yellow}Kernel: ${normal}$(uname -rs)
 ${yellow}Uptime:${normal}$(uptime -p | cut -d'p' -f 2)
-${yellow}Memory: ${normal}$(toGB $(($(simplify ${marray[15]}) - $(simplify ${marray[19]}))))GB / $(toGB ${marray[13]})GB
+${yellow}Memory: ${normal}$(toGB $(($(simplify ${marray[14]}) - $(simplify ${marray[18]}))))GB / $(toGB ${marray[12]})GB
 ${yellow}Termux Version: ${normal}${TERMUX_VERSION}"
 }
 getopts t o
