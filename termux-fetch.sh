@@ -29,6 +29,7 @@ echo "${yellow}OS: ${normal}$(uname -o) $(getprop ro.build.version.release) $(un
 ${yellow}Host: ${normal}$(getprop ro.product.brand) $(getprop ro.vendor.product.model)
 ${yellow}Kernel: ${normal}$(uname -rs)
 ${yellow}Uptime:${normal}$(uptime -p | cut -d'p' -f 2)
+${yellow}Packages:${normal}$(apt list --installed | wc -l)
 ${yellow}Memory: ${normal}$(toGB $(($(simplify ${marray[14]}) - $(simplify ${marray[18]}))))GB / $(toGB ${marray[12]})GB
 ${yellow}Termux Version: ${normal}${TERMUX_VERSION}"
 }
