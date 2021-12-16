@@ -1,6 +1,6 @@
 {
         "name": "termux-fetch",
-        "version": "1.0.6",
+        "version": "1.0.7",
         "arch": "all",
         "maintainer": "@NoobJsPerson",
         "description": "A small bash script that gives info about your device",
