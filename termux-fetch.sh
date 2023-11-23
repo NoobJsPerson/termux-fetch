@@ -9,9 +9,7 @@ checkcmd(){
 	ls $PREFIX/bin | grep -c $1
 }
 main(){
-sh <<< 'top > .tmp'
-marray=($(cat .tmp | tr ';' '\n'))
-rm .tmp
+marray=($(free | tr ';' '\n'))
 if [[ $1 != t ]]; then
 yellow=$(printf '\033[1;33m')
 normal=$(printf '\033[0m')
@@ -30,7 +28,7 @@ ${yellow}Host: ${normal}$(getprop ro.product.brand) $(getprop ro.vendor.product.
 ${yellow}Kernel: ${normal}$(uname -rs)
 ${yellow}Uptime:${normal}$(uptime -p | cut -d'p' -f 2)
 ${yellow}Packages: ${normal}$((apt list --installed | wc -l) 2> /dev/null)
-${yellow}Memory: ${normal}$(toGB $(($(simplify ${marray[14]}) - $(simplify ${marray[18]}))))GB / $(toGB ${marray[12]})GB
+${yellow}Memory: ${normal}$(toGB $(simplify ${marray[12]}))GB / $(toGB ${marray[7]})GB
 ${yellow}Termux Version: ${normal}${TERMUX_VERSION}"
 }
 getopts t o
