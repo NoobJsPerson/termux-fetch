@@ -17,6 +17,16 @@ else
 yellow='the'
 normal='is'
 fi
+shell=$SHELL
+shell=${shell/"/data/data/com.termux/files/usr/bin/"/};
+case $shell in
+	bash)
+	shell=$shell" "$BASH_VERSION
+	;;
+	zsh)
+	shell=$shell" "$(zsh --version)
+	;;
+esac
 echo "${yellow}$(whoami)@$(hostname)"
 if [[ $(checkcmd termux-camera-info) != 0 && $(checkcmd jq) != 0 ]];
 then
@@ -27,6 +37,7 @@ echo "${yellow}OS: ${normal}$(uname -o) $(getprop ro.build.version.release) $(un
 ${yellow}Host: ${normal}$(getprop ro.product.brand) $(getprop ro.vendor.product.model)
 ${yellow}Kernel: ${normal}$(uname -rs)
 ${yellow}Uptime:${normal}$(uptime -p | cut -d'p' -f 2)
+${yellow}Shell: ${normal}${shell}
 ${yellow}Packages: ${normal}$((apt list --installed | wc -l) 2> /dev/null)
 ${yellow}Memory: ${normal}$(toGB $(simplify ${marray[12]}))GB / $(toGB ${marray[7]})GB
 ${yellow}Termux Version: ${normal}${TERMUX_VERSION}"
