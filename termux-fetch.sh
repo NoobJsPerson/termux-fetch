@@ -10,37 +10,57 @@ checkcmd(){
 }
 main(){
 marray=($(free | tr ';' '\n'))
+ascii=''
 if [[ $1 != t ]]; then
-yellow=$(printf '\033[1;33m')
-normal=$(printf '\033[0m')
+y=$(printf '\033[1;33m')
+n=$(printf '\033[0m')
+b=$(printf '\033[48;5;21m\033[38;5;81m')
+w=$(printf '\033[47m')
+brand=$(getprop ro.product.brand)
+	case $brand in
+		samsung)
+		ascii="
+            ${b}#################################${n}
+        ${b}#${w}   ${b}#${w}   ${b}#${w} ${b}###${w} ${b}#${w}   ${b}#${w} ${b}#${w} ${b}#${w} ${b}###${w} ${b}#${w}   ${b}#######${n}
+     ${b}####${w} ${b}###${w} ${b}#${w} ${b}#${w}  ${b}#${w}  ${b}#${w} ${b}###${w} ${b}#${w} ${b}#${w}  ${b}##${w} ${b}#${w} ${b}#########${n}
+   ${b}######${w}   ${b}#${w}   ${b}#${w} ${b}#${w} ${b}#${w} ${b}#${w}   ${b}#${w} ${b}#${w} ${b}#${w} ${b}#${w} ${b}#${w} ${b}#${w} ${b}########${n}
+  ${b}#########${w} ${b}#${w} ${b}#${w} ${b}#${w} ${b}###${w} ${b}###${w} ${b}#${w} ${b}#${w} ${b}#${w} ${b}##${w}  ${b}#${w} ${b}#${w} ${b}####${n}
+  ${b}#######${w}   ${b}#${w} ${b}#${w} ${b}#${w} ${b}###${w} ${b}#${w}   ${b}#${w}   ${b}#${w} ${b}###${w} ${b}#${w}   ${b}#${n}
+    ${b}#################################${n}
+
+"
+    		;;
+    	esac
 else
-yellow='the'
-normal='is'
+y='the'
+n='is'
+w=''
+b=''
 fi
 shell=$SHELL
 shell=${shell/"/data/data/com.termux/files/usr/bin/"/};
 case $shell in
-	bash)
+ 	bash)
 	shell=$shell" "$BASH_VERSION
 	;;
 	zsh)
 	shell=$shell" "$(zsh --version)
 	;;
 esac
-echo "${yellow}$(whoami)@$(hostname)"
+echo "${ascii}${y}$(whoami)@$(hostname)"
 if [[ $(checkcmd termux-camera-info) != 0 && $(checkcmd jq) != 0 ]];
 then
-termux-camera-info | jq -r --arg yellow $yellow  --arg normal $normal '"\($yellow)Cameras: \($normal)\(length)\n\($yellow)Capabilities: \($normal)\(.[0].capabilities | join(", "))"'
-termux-battery-status | jq -r --arg yellow $yellow  --arg normal $normal '"\($yellow)Health: \($normal)\(.health)\n\($yellow)Percentage: \($normal)\(.percentage | tostring)%\n\($yellow)Temperature: \($normal)\(.temperature | floor | tostring)°C"'
+termux-camera-info | jq -r --arg y $y  --arg n $n '"\($y)Cameras: \($n)\(length)\n\($y)Capabilities: \($n)\(.[0].capabilities | join(", "))"'
+termux-battery-status | jq -r --arg y $y  --arg n $n '"\($y)Health: \($n)\(.health)\n\($y)Percentage: \($n)\(.percentage | tostring)%\n\($y)Temperature: \($n)\(.temperature | floor | tostring)°C"'
 fi
-echo "${yellow}OS: ${normal}$(uname -o) $(getprop ro.build.version.release) $(uname -m)
-${yellow}Host: ${normal}$(getprop ro.product.brand) $(getprop ro.vendor.product.model)
-${yellow}Kernel: ${normal}$(uname -rs)
-${yellow}Uptime:${normal}$(uptime -p | cut -d'p' -f 2)
-${yellow}Shell: ${normal}${shell}
-${yellow}Packages: ${normal}$((apt list --installed | wc -l) 2> /dev/null)
-${yellow}Memory: ${normal}$(toGB $(simplify ${marray[12]}))GB / $(toGB ${marray[7]})GB
-${yellow}Termux Version: ${normal}${TERMUX_VERSION}"
+echo "${y}OS: ${n}$(uname -o) $(getprop ro.build.version.release) $(uname -m)
+${y}Host: ${n}${brand} $(getprop ro.vendor.product.model)
+${y}Kernel: ${n}$(uname -rs)
+${y}Uptime:${n}$(uptime -p | cut -d'p' -f 2)
+${y}Shell: ${n}${shell}
+${y}Packages: ${n}$((apt list --installed | wc -l) 2> /dev/null)
+${y}Memory: ${n}$(toGB $(simplify ${marray[12]}))GB / $(toGB ${marray[7]})GB
+${y}Termux Version: ${n}${TERMUX_VERSION}"
 }
 getopts t o
 [[ $(checkcmd termux-tts-speak) != 0 && $o != '?' ]] && main t | termux-tts-speak || main
