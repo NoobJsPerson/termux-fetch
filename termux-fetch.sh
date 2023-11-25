@@ -18,7 +18,7 @@ b=$(printf '\033[48;5;21m\033[38;5;81m')
 w=$(printf '\033[47m')
 brand=$(getprop ro.product.brand)
 if [[ $1 == a ]]; then
-ascii=$(cat $2 | printf)"
+ascii=$(printf "$(cat $2)")"
 
 "
 else
