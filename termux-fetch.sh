@@ -15,7 +15,7 @@ if [[ $1 != t ]]; then
 y=$(printf '\033[1;33m')
 n=$(printf '\033[0m')
 w=$(printf '\033[47m')
-brand=$(getprop ro.product.brand)
+[[ $1 == b ]] && brand=$2 || brand=$(getprop ro.product.brand)
 if [[ $1 == a ]]; then
 ascii=$(printf "$(cat $2)")"
 
@@ -33,7 +33,7 @@ else
   ${b}       ${w}   ${b} ${w} ${b} ${w} ${b} ${w} ${b}   ${w} ${b} ${w}   ${b} ${w}   ${b} ${w} ${b}   ${w} ${b} ${w}   ${b} ${n}
     ${b}                                 ${n}
 
-    "
+"
 
     		;;
     		oppo)
@@ -52,6 +52,24 @@ ${g}                                         ${n}
 "
 
     		;;
+		*)
+		ascii="
+    __
+    \##\\
+     \##\\
+      \##\\
+       \##\\
+        \##\\
+         \##\\
+         /##/
+        /##/
+       /##/
+      /##/
+     /##/    ______________
+    /##/    |##############|
+
+"
+		;;
     	esac
 fi
 else
@@ -86,18 +104,23 @@ ${y}Memory: ${n}$(toGB $(simplify ${marray[12]}))GB / $(toGB ${marray[7]})GB
 ${y}Termux Version: ${n}${TERMUX_VERSION}"
 }
 if [[ $1 != '' ]]; then
- while getopts "ath" OPTIONS; do
+ while getopts "atbh" OPTIONS; do
 	case $OPTIONS in
 		a)
 		[[ $2 != '' ]] && main a $2 || (echo "You didn't provide a file (using default ascii)" && main)
-		exit 1;
+		exit 0;
 		;;
 		t)
-		[[ $(checkcmd termux-tts-speak) != 0 ]] && main t | termux-tts-speak || ''
+		[[ $(checkcmd termux-tts-speak) != 0 ]] && main t | termux-tts-speak || main
+		exit 0;
+		;;
+		b)
+		[[ $2 != '' ]] && main b $2 || (echo "You didn't provide a brand (using your device's brand)" && main)
+		exit 0
 		;;
 		h)
 		echo "termux-fetch: a simple bash script that displays information about your device like linux version, device brand and model, default termux shell and more.
-you can even allow the script to retrieve more information like camera count and features, battery status and device temperature by installing the Termux:API app from F-droid (https://f-droid.org/en/packages/com.termux.api/) and installing the packages (termux-api) and (jq), by doing so you also can hear the output of this script be read by a tts voice
+you can even allow the script to retrieve more information like camera count and features, battery status and device temperature by installing the Termux:API app from F-droid (https://f-droid.org/en/packages/com.termux.api/) and installing the packages (termux-api) and (jq), by doing so you also can choose to hear the output of this script be read by a tts voice using the -t flag
 Options:
 
 		-t: read script output with tts voice
@@ -106,10 +129,13 @@ Options:
 
 		-a: display content of the given file instead of ascii art
 
+		-b: display the ascii art of the given brand (has higher priority than -a)
 "
+		exit 0;
 		;;
 		?)
-		echo "Usage: termux-fetch [-th] [-a ascii_file]"
+		echo "Usage: termux-fetch [-th] [-a ascii_file] [-b brand]"
+		exit 0;
 		;;
 	esac
 done
