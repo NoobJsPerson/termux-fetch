@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 TEMP=`getopt -o a:b:cdht --long disable-camera-info,disable-battery-status,help,ascii,brand,tts -- "$@"`
 eval set -- "$TEMP"
 noop(){

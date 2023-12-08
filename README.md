@@ -1,7 +1,7 @@
 # termux-fetch
 A small bash script that gives info about your device
 ![Screenshot of the output of termux-fetch](screenshot.jpg)
-### instalation
+### Instalation
 - Before anything, you should clone this repository
 ```git clone https://github.com/noobjsperson/termux-fetch```
 1. Now you could install the provided deb file with
@@ -14,3 +14,7 @@ A small bash script that gives info about your device
 ```termux-create-package manifest.json```
 - Install the resulting deb file
 ```apt install ./nameofdeb.deb```
+
+### Credits
+noobjsperson: original author
+owokitty: helped me fix the script for xfce4-terminal, qterminal and aterm
