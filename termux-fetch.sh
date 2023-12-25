@@ -1,5 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
-TEMP=`getopt -o a:b:cdht --long disable-camera-info,disable-battery-status,help,ascii,brand,tts -- "$@"`
+TEMP=`getopt -o a:b:cdht --long disable-camera-info,disable-battery-status,help,ascii:,brand:,tts -- "$@"`
 eval set -- "$TEMP"
 noop(){
 	printf ''
@@ -20,7 +20,8 @@ if [[ $1 != *t* ]]; then
 y=$(printf '\033[1;33m')
 n=$(printf '\033[0m')
 w=$(printf '\033[47m')
-[[ $1 == *b* ]] && brand=$2 || brand=$(getprop ro.product.brand)
+realbrand=$(getprop ro.product.brand)
+[[ $1 == *b* ]] && brand=$2 || brand=$realbrand
 if [[ $1 == *a* ]]; then
 ascii=$(printf "$(cat $2)")"
 
@@ -103,7 +104,7 @@ if [[ $(getprop vzw.os.rooted) == true ]]; then
 rooted="Rooted"
 fi
 echo "${y}OS: ${n}$(uname -o) $(getprop ro.build.version.release) $(uname -m)
-${y}Host: ${n}${brand} $(getprop ro.vendor.product.model) ${rooted}
+${y}Host: ${n}${realbrand} $(getprop ro.vendor.product.model) ${rooted}
 ${y}Kernel: ${n}$(uname -rs)
 ${y}Uptime:${n}$(uptime -p | cut -d'p' -f 2)
 ${y}Shell: ${n}${shell}
@@ -114,7 +115,7 @@ ${extra}"
 }
 if [[ $1 != '' ]]; then
 for ((i=1; i<=$#; i++)) do
-	j=$(expr ${i} - 1)
+	j=$(expr ${i} + 1)
 	case "${!i}" in
 		-a| --ascii)
 		if [[ "${!j}" != '' ]]; then
